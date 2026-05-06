@@ -36,18 +36,18 @@ const FAQS: { q: string; a: string }[] = [
 ];
 
 const CITY_SLIDES = [
-  { word: "Namaste", lang: "Hindi", city: "New Delhi", src: "/delhi_one.mp4" },
-  { word: "Namaste", lang: "Hindi", city: "New Delhi", src: "/delhi_two.mp4" },
-  { word: "Kasa Kay", lang: "Marathi", city: "Mumbai", src: "/mumbai_one.mp4" },
-  { word: "Kasa Kay", lang: "Marathi", city: "Mumbai", src: "/mumbai_two.mp4" },
-  { word: "Nomoshkar", lang: "Bengali", city: "Kolkata", src: "/bengal_one.mp4" },
-  { word: "Nomoshkar", lang: "Bengali", city: "Kolkata", src: "/bengal_two.mp4" },
-  { word: "Vanakkam", lang: "Tamil", city: "Chennai", src: "/tamil_one.mp4" },
-  { word: "Vanakkam", lang: "Tamil", city: "Chennai", src: "/tamil_two.mp4" },
-  { word: "Kem Cho", lang: "Gujarati", city: "Ahmedabad", src: "/gujarati_one.mp4" },
-  { word: "Kem Cho", lang: "Gujarati", city: "Ahmedabad", src: "/gujarati_two.mp4" },
-  { word: "Namaskaram", lang: "Telugu", city: "Hyderabad", src: "/telugu_one.mp4" },
-  { word: "Namaskaram", lang: "Telugu", city: "Hyderabad", src: "/telugu_two.mp4" },
+  { word: "Namaste", lang: "Hindi", city: "New Delhi", src: "/delhi_one.webm" },
+  { word: "Namaste", lang: "Hindi", city: "New Delhi", src: "/delhi_two.webm" },
+  { word: "Kasa Kay", lang: "Marathi", city: "Mumbai", src: "/mumbai_one.webm" },
+  { word: "Kasa Kay", lang: "Marathi", city: "Mumbai", src: "/mumbai_two.webm" },
+  { word: "Nomoshkar", lang: "Bengali", city: "Kolkata", src: "/bengal_one.webm" },
+  { word: "Nomoshkar", lang: "Bengali", city: "Kolkata", src: "/bengal_two.webm" },
+  { word: "Vanakkam", lang: "Tamil", city: "Chennai", src: "/tamil_one.webm" },
+  { word: "Vanakkam", lang: "Tamil", city: "Chennai", src: "/tamil_two.webm" },
+  { word: "Kem Cho", lang: "Gujarati", city: "Ahmedabad", src: "/gujarati_one.webm" },
+  { word: "Kem Cho", lang: "Gujarati", city: "Ahmedabad", src: "/gujarati_two.webm" },
+  { word: "Namaskaram", lang: "Telugu", city: "Hyderabad", src: "/telugu_one.webm" },
+  { word: "Namaskaram", lang: "Telugu", city: "Hyderabad", src: "/telugu_two.webm" },
 ];
 
 
