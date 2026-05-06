@@ -261,9 +261,25 @@ export function EventsLanding() {
 
 
 
+      <section className="about-us section" id="about">
+        <div className="section-heading" data-reveal>
+          <p className="overline">About Us</p>
+          <div className="about-text-content">
+            <p>
+              Built for India’s diverse audiences, Times Languages Live curates region-first events across healthcare, education, entertainment, lifestyle, and MSMEs. Each experience is designed for a regional audience, grounded in regional context, and focused on real decisions, business, careers, and growth.
+            </p>
+            <p>
+              From focused gatherings to large-format summits, we bring together policymakers, industry leaders, and communities to exchange practical insight and create direct, high-value connections both on-ground and online.
+            </p>
+          </div>
+        </div>
+      </section>
+
+
+
       <section className="section" id="events">
         <div className="section-heading" data-reveal>
-          <p className="overline">The 2026 Calendar</p>
+          <p className="overline">Flagship Events</p>
           <h2>Find your moment in the spotlight.</h2>
           <p>
             Our flagship events include Times Future of Maternity, Times Study Abroad Conclave,
@@ -291,12 +307,7 @@ export function EventsLanding() {
             <p className="overline">Why Times Languages Live?</p>
             <h2>Strong Speakers. Relevant Audiences. Outcome-Driven Events.</h2>
             <p>
-              Built for India&apos;s diverse audiences, Times Languages Live curates region-first events
-              across healthcare, education, entertainment &amp; lifestyle, and MSMEs. Each experience is
-              designed for a regional audience, grounded in regional context, and focused on real
-              decisions - business, careers, and growth. From focused gatherings to large-format summits,
-              we bring together policymakers, industry leaders, and communities to exchange practical
-              insight and create direct, high-value connections both on-ground and online.
+              We bring regional business leaders, policymakers, and domain experts together with a credible media voice to address real issues – from local healthcare access and education gaps to MSME growth and evolving consumer trends.
             </p>
           </div>
           <div className="universe-grid">
@@ -320,20 +331,20 @@ export function EventsLanding() {
         <div className="partners-copy" data-reveal>
           <p className="overline">For Partners</p>
           <h2>Partner with Times Languages Live - Built Around Your Objectives.</h2>
-          <p>
-            We bring regional business leaders, policymakers, and domain experts together with a
-            credible media voice to address real issues - from local healthcare access and education
-            gaps to MSME growth and evolving consumer trends. Work with us to position your brand
-            in regional markets, communicate with clarity to local audiences, and build relationships
-            that convert.
-          </p>
-          <div className="partners-actions">
+          <div className="partners-intro-row">
+            <p>
+              Work with us to position your brand in regional markets, communicate with clarity to local audiences, and build relationships that convert.
+            </p>
             <a className="button button-primary" href="mailto:sales@timeslanguages.in?subject=Languages Live sponsorship inquiry">
-              Explore Sponsorship Opportunities →
+              Partner with Us →
             </a>
-            <a className="button button-secondary" href="mailto:sales@timeslanguages.in?subject=Schedule a call">
-              Schedule a Call
-            </a>
+          </div>
+          <div className="partners-actions">
+            <div className="partners-sponsorship-note">
+              <p>
+                <strong>Sponsorship Opportunities:</strong> Connect with our team to explore tailored formats – from speaking slots to integrated regional campaigns aligned with your goals.
+              </p>
+            </div>
           </div>
         </div>
         <div className="partner-inventory">
@@ -425,7 +436,7 @@ export function EventsLanding() {
               <li><a href="#events">Education</a></li>
               <li><a href="#events">Healthcare</a></li>
               <li><a href="#events">Entertainment &amp; Lifestyle</a></li>
-              <li><a href="#events">MSME Growth</a></li>
+              <li><a href="#events">MSME</a></li>
             </ul>
           </div>
 
