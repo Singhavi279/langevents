@@ -1,34 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  audienceOptions,
-  categories,
-  cityOptions,
-  events,
-  formatOptions,
-  languageOptions,
-  type LanguageEvent
-} from "@/lib/events";
-
-type SortMode = "Featured" | "Upcoming first" | "City A-Z" | "Category A-Z";
-
-const allTags = (event: LanguageEvent) => [
-  event.title,
-  event.eyebrow,
-  event.subtitle,
-  event.description,
-  event.category,
-  event.subCategory,
-  event.status,
-  event.cityLabel,
-  ...event.cities,
-  ...event.languageTags,
-  ...event.audienceTags,
-  ...event.intentTags,
-  ...event.formatTags,
-  ...event.partnerTags
-];
+import { useEffect, useRef, useState } from "react";
+import { cityOptions, events, type LanguageEvent } from "@/lib/events";
 
 const withUtm = (event: LanguageEvent) => {
   const url = new URL(event.micrositeUrl);
@@ -42,90 +15,59 @@ const withUtm = (event: LanguageEvent) => {
 const FAQS: { q: string; a: string }[] = [
   {
     q: "What is Times Languages Live?",
-    a: "Languages Live is the flagship vernacular-first events arm of Times Internet — a curated portfolio of premium IPs across Education, Healthcare and Youth Culture, built for the audiences, languages and cities that move modern India."
+    a: "Times Languages Live is the vernacular-first events arm of Times Internet - a curated portfolio of region-first experiences across healthcare, education, entertainment & lifestyle, and MSMEs, built for the audiences, cities, and languages that move modern India."
   },
   {
-    q: "Which Indian cities do these events activate in?",
-    a: "Our calendar lights up Delhi, Mumbai, Pune, Jaipur, Bhopal, Patna, Lucknow, Chennai, Ahmedabad and Hyderabad — with multi-city formats for our flagship properties."
+    q: "Which domains do Times Languages Live events cover?",
+    a: "Our events span healthcare, education, entertainment & lifestyle, and MSMEs - each designed for a regional audience, grounded in regional context, and focused on real decisions like business growth, careers, and community health."
   },
   {
-    q: "How can brands sponsor or partner with these events?",
-    a: "Inventory spans title sponsorship, category presenting, city partnerships, awards association, content series, expo booths, on-ground sampling and lead generation. Write to sales@timeslanguages.in for the partnership deck."
+    q: "What are the flagship events?",
+    a: "Our flagship IPs include Times Future of Maternity, Times Study Abroad Conclave, Times Career Counselling, NBT Mic Drop Madness, and Times India MSME Dialogue: Atmanirbhar Udyam."
   },
   {
-    q: "Are events conducted in Hindi or English?",
-    a: "Most flagship IPs are bilingual or vernacular-first — Hindi, English, Hinglish and regional language expression, calibrated to each city and audience."
+    q: "How can brands partner with Times Languages Live?",
+    a: "We offer tailored formats - from speaking slots and title sponsorships to integrated regional campaigns. Write to sales@timeslanguages.in for the partnership deck."
   },
   {
     q: "How do I attend or register?",
-    a: "Every event has its own microsite linked from the calendar above. Tap the primary action on any card to register, view the agenda or claim a counselling slot."
+    a: "Every event has its own microsite linked from the calendar above. Tap the primary action on any card to register, view the agenda, or claim a counselling slot."
   }
 ];
 
-const GREETINGS = [
-  { word: "Namaste", lang: "Hindi" },
-  { word: "Vanakkam", lang: "Tamil" },
-  { word: "Namaskaram", lang: "Telugu" },
-  { word: "Sat Sri Akal", lang: "Punjabi" },
-  { word: "Nomoshkar", lang: "Bengali" },
-  { word: "Namaskara", lang: "Kannada" },
-  { word: "Kem Cho", lang: "Gujarati" },
-  { word: "Kasa Kay", lang: "Marathi" }
+const CITY_SLIDES = [
+  { word: "Namaste", lang: "Hindi", city: "New Delhi", src: "/delhi_one.mp4" },
+  { word: "Namaste", lang: "Hindi", city: "New Delhi", src: "/delhi_two.mp4" },
+  { word: "Kasa Kay", lang: "Marathi", city: "Mumbai", src: "/mumbai_one.mp4" },
+  { word: "Kasa Kay", lang: "Marathi", city: "Mumbai", src: "/mumbai_two.mp4" },
+  { word: "Nomoshkar", lang: "Bengali", city: "Kolkata", src: "/bengal_one.mp4" },
+  { word: "Nomoshkar", lang: "Bengali", city: "Kolkata", src: "/bengal_two.mp4" },
+  { word: "Vanakkam", lang: "Tamil", city: "Chennai", src: "/tamil_one.mp4" },
+  { word: "Vanakkam", lang: "Tamil", city: "Chennai", src: "/tamil_two.mp4" },
+  { word: "Kem Cho", lang: "Gujarati", city: "Ahmedabad", src: "/gujarati_one.mp4" },
+  { word: "Kem Cho", lang: "Gujarati", city: "Ahmedabad", src: "/gujarati_two.mp4" },
+  { word: "Namaskaram", lang: "Telugu", city: "Hyderabad", src: "/telugu_one.mp4" },
+  { word: "Namaskaram", lang: "Telugu", city: "Hyderabad", src: "/telugu_two.mp4" },
 ];
 
-const CITIES = [
-  { src: "/taj_mahal.png", alt: "Taj Mahal", caption: "Agra" },
-  { src: "/mumbai.png", alt: "Gateway of India", caption: "Mumbai" },
-  { src: "/chennai.png", alt: "Kapaleeshwarar Temple", caption: "Chennai" },
-  { src: "/kolkata.png", alt: "Victoria Memorial", caption: "Kolkata" },
-  { src: "/hyderabad.png", alt: "Charminar", caption: "Hyderabad" },
-  { src: "/ahmedabad.png", alt: "Sidi Saiyyed Mosque", caption: "Ahmedabad" },
-  { src: "/pune.png", alt: "Shaniwar Wada", caption: "Pune" }
-];
 
-const STATS = [
-  { value: "10+", label: "Indian cities" },
-  { value: "8", label: "Languages on stage" },
-  { value: "4", label: "Flagship IPs" },
-  { value: "1M+", label: "Audience reach" }
-];
 
 const UNIVERSES = [
-  {
-    numeral: "01",
-    title: "Education",
-    text: "Career decisions, study abroad, college discovery, counselling and the future of skilling.",
-    meta: "2 IPs · Students, Parents, Universities"
-  },
-  {
-    numeral: "02",
-    title: "Healthcare",
-    text: "Trust-led platforms across maternity, fertility, wellness and family healthcare.",
-    meta: "1 IP · Families, Clinicians, Hospitals"
-  },
-  {
-    numeral: "03",
-    title: "Youth Culture",
-    text: "Creator discovery, Hindi-first entertainment, city rounds and stage-bound talent.",
-    meta: "1 IP · Creators, College Crowds, Hindi Belt"
-  },
-  {
-    numeral: "04",
-    title: "Partner-Open IPs",
-    text: "Sales-ready properties for sponsorship, content series, awards and lead generation.",
-    meta: "Open canvas · Title, Category, City"
-  }
+  { numeral: "01", title: "Education", text: "Study abroad, career counselling, college discovery and skilling - decisions that shape futures." },
+  { numeral: "02", title: "Healthcare", text: "Trusted platforms on maternity, fertility, wellness and family health access." },
+  { numeral: "03", title: "Entertainment & Lifestyle", text: "Creator discovery, Hindi-first culture, talent stages and city rounds." },
+  { numeral: "04", title: "MSME Growth", text: "Policy dialogue, business access, market connections and Atmanirbhar entrepreneurship." },
 ];
 
 const PARTNER_INVENTORY = [
-  { label: "Title sponsorship", note: "Lead the IP. Own the marquee." },
-  { label: "Co-presenting partner", note: "Shared masthead, shared spotlight." },
-  { label: "City partner", note: "Anchor a market. Local takeover." },
-  { label: "Category partner", note: "Own a vertical inside the IP." },
-  { label: "Expo booth", note: "On-ground discovery and sampling." },
-  { label: "Awards association", note: "Recognition the audience trusts." },
-  { label: "Content series", note: "Branded story arcs across surfaces." },
-  { label: "Lead generation", note: "Decision-stage audiences, qualified." }
+  { label: "Thought Leadership", note: "Position your brand as a domain authority." },
+  { label: "Decision-Maker Access", note: "Engage policymakers, industry leaders, experts." },
+  { label: "Regional Brand Relevance", note: "Speak to local audiences in their language." },
+  { label: "Multi-City Exposure", note: "Activate across 10+ Indian cities." },
+  { label: "Audience Insights", note: "First-party data from high-intent communities." },
+  { label: "Speaking Slots", note: "Own the stage. Drive the conversation." },
+  { label: "Title Sponsorship", note: "Lead the IP. Own the marquee." },
+  { label: "Integrated Campaigns", note: "Regional campaigns aligned with your goals." }
 ];
 
 // Ornamental section divider
@@ -146,41 +88,38 @@ const Divider = () => (
 );
 
 export function EventsLanding() {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<(typeof categories)[number]>("All");
-  const [city, setCity] = useState<(typeof cityOptions)[number]>("All");
-  const [audience, setAudience] = useState<(typeof audienceOptions)[number]>("All");
-  const [language, setLanguage] = useState<(typeof languageOptions)[number]>("All");
-  const [format, setFormat] = useState<(typeof formatOptions)[number]>("All");
-  const [sort, setSort] = useState<SortMode>("Featured");
+
   const [scrolled, setScrolled] = useState(false);
   const [showTop, setShowTop] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const [greetingIndex, setGreetingIndex] = useState(0);
-  // Each card starts at a different city; they cycle one-at-a-time in round-robin
-  const [cityIndices, setCityIndices] = useState([0, 2, 4]);
-  const roundRobinRef = useRef(0);
-
-  const heroVisualsRef = useRef<HTMLDivElement | null>(null);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [activeSlot, setActiveSlot] = useState<0 | 1>(0);
+  const slideIdxRef = useRef(0);
+  const activeSlotRef = useRef<0 | 1>(0);
+  const videoARef = useRef<HTMLVideoElement>(null);
+  const videoBRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const greetingInterval = setInterval(() => {
-      setGreetingIndex((prev) => (prev + 1) % GREETINGS.length);
-    }, 1800);
-    const cityInterval = setInterval(() => {
-      const card = roundRobinRef.current % 3;
-      roundRobinRef.current += 1;
-      setCityIndices((prev) => {
-        const next = [...prev];
-        next[card] = (next[card] + 1) % CITIES.length;
-        return next;
-      });
-    }, 1800);
-    return () => {
-      clearInterval(greetingInterval);
-      clearInterval(cityInterval);
+    videoARef.current?.play().catch(() => { });
+
+    const tick = () => {
+      const next = (slideIdxRef.current + 1) % CITY_SLIDES.length;
+      const nextSlot = (activeSlotRef.current === 0 ? 1 : 0) as 0 | 1;
+      const nextVideo = nextSlot === 0 ? videoARef.current : videoBRef.current;
+      if (nextVideo) {
+        nextVideo.src = CITY_SLIDES[next].src;
+        nextVideo.load();
+        nextVideo.play().catch(() => { });
+      }
+      slideIdxRef.current = next;
+      activeSlotRef.current = nextSlot;
+      setSlideIndex(next);
+      setActiveSlot(nextSlot);
     };
+
+    const id = setInterval(tick, 2000);
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -220,62 +159,10 @@ export function EventsLanding() {
     return () => io.disconnect();
   }, []);
 
-  // Hero polaroid mouse parallax
-  useEffect(() => {
-    const el = heroVisualsRef.current;
-    if (!el) return;
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const onMove = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      el.style.setProperty("--mx", String(x));
-      el.style.setProperty("--my", String(y));
-    };
-    const onLeave = () => {
-      el.style.setProperty("--mx", "0");
-      el.style.setProperty("--my", "0");
-    };
-    el.addEventListener("mousemove", onMove);
-    el.addEventListener("mouseleave", onLeave);
-    return () => {
-      el.removeEventListener("mousemove", onMove);
-      el.removeEventListener("mouseleave", onLeave);
-    };
-  }, []);
 
-  const filteredEvents = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-    return events
-      .filter((event) => {
-        const matchesQuery =
-          !normalizedQuery ||
-          allTags(event).some((value) => value.toLowerCase().includes(normalizedQuery));
-        const matchesCategory = category === "All" || event.category === category;
-        const matchesCity = city === "All" || event.cities.includes(city);
-        const matchesAudience = audience === "All" || event.audienceTags.includes(audience);
-        const matchesLanguage = language === "All" || event.languageTags.includes(language);
-        const matchesFormat = format === "All" || event.formatTags.includes(format);
-        return (
-          matchesQuery &&
-          matchesCategory &&
-          matchesCity &&
-          matchesAudience &&
-          matchesLanguage &&
-          matchesFormat
-        );
-      })
-      .sort((a, b) => {
-        if (sort === "Featured") return a.featuredRank - b.featuredRank;
-        if (sort === "City A-Z") return a.cityLabel.localeCompare(b.cityLabel);
-        if (sort === "Category A-Z") return a.category.localeCompare(b.category);
-        return statusWeight(a.status) - statusWeight(b.status);
-      });
-  }, [audience, category, city, format, language, query, sort]);
 
-  const marqueeCities = [...CITIES, ...CITIES];
+
 
   return (
     <main>
@@ -305,7 +192,31 @@ export function EventsLanding() {
       </header>
 
       <section className="hero" id="top">
-        <div className="hero-copy">
+        {/* A/B video background */}
+        <div className="hero-bg" aria-hidden="true">
+          <video
+            ref={videoARef}
+            className="hero-video"
+            style={{ opacity: activeSlot === 0 ? 1 : 0 }}
+            src={CITY_SLIDES[0].src}
+            autoPlay
+            muted
+            playsInline
+            loop
+          />
+          <video
+            ref={videoBRef}
+            className="hero-video"
+            style={{ opacity: activeSlot === 1 ? 1 : 0 }}
+            muted
+            playsInline
+            loop
+          />
+          <div className="hero-overlay" />
+        </div>
+
+        {/* Content */}
+        <div className="hero-content">
           <a href="#top" className="hero-logo-wrap" aria-label="Times Internet Languages Live home">
             <img
               src="/langlive.png"
@@ -313,208 +224,112 @@ export function EventsLanding() {
               className="hero-logo-img"
             />
           </a>
-          <h1>
-            India&apos;s grandest stage,
-            <br />
-            <span className="hero-script">in every language.</span>
-          </h1>
-          <p>
-            A premium portfolio of vernacular-first event IPs from Times Internet — built across
-            Education, Healthcare and Youth Culture for the audiences, cities and languages that
-            move modern India.
-          </p>
-          <div className="hero-actions">
-            <a href="#events" className="button button-primary">
-              Explore the 2026 Calendar →
-            </a>
-            <a href="#partners" className="button button-secondary">
-              Partner with Us
-            </a>
+          <div className="hero-copy">
+            <span className="hero-greeting" key={`greeting-${slideIndex}`}>
+              {CITY_SLIDES[slideIndex].word},
+              <em>{CITY_SLIDES[slideIndex].lang}</em>
+            </span>
+            <h1>
+              India&apos;s grandest stage, <span className="hero-script">in every language</span>
+            </h1>
+            <p>
+              A premium portfolio of vernacular-first event IPs from <strong>Times Internet</strong>, built across <strong>healthcare, education, entertainment & lifestyle, and MSME domains</strong> for the audiences, cities, and languages that move modern India
+            </p>
+            <div className="hero-actions">
+              <a href="#events" className="button button-primary">
+                Explore Our Events →
+              </a>
+              <a href="#partners" className="button button-secondary button-ghost">
+                Partner with Us
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="hero-visuals" ref={heroVisualsRef}>
-          <span className="hero-greeting" key={`greeting-${greetingIndex}`}>
-            {GREETINGS[greetingIndex].word},
-            <em>{GREETINGS[greetingIndex].lang}</em>
-          </span>
-          <div className="polaroid polaroid-1" key={`p1-${cityIndices[0]}`}>
-            <img src={CITIES[cityIndices[0]].src} alt={CITIES[cityIndices[0]].alt} />
-            <span className="polaroid-caption">{CITIES[cityIndices[0]].caption}</span>
-          </div>
-          <div className="polaroid polaroid-2" key={`p2-${cityIndices[1]}`}>
-            <img src={CITIES[cityIndices[1]].src} alt={CITIES[cityIndices[1]].alt} />
-            <span className="polaroid-caption">{CITIES[cityIndices[1]].caption}</span>
-          </div>
-          <div className="polaroid polaroid-3" key={`p3-${cityIndices[2]}`}>
-            <img src={CITIES[cityIndices[2]].src} alt={CITIES[cityIndices[2]].alt} />
-            <span className="polaroid-caption">{CITIES[cityIndices[2]].caption}</span>
-          </div>
-        </div>
-      </section>
-
-      <section className="stats-band" aria-label="Languages Live at a glance">
-        {STATS.map((stat, i) => (
-          <div
-            className="stat"
-            key={stat.label}
-            data-reveal
-            style={{ ['--reveal-delay' as never]: `${i * 100}ms` }}
-          >
-            <span className="stat-value">{stat.value}</span>
-            <span className="stat-label">{stat.label}</span>
-            {i < STATS.length - 1 && <span className="stat-divider" aria-hidden="true">✦</span>}
-          </div>
-        ))}
-      </section>
-
-      <section className="cities-marquee" aria-label="Cities we activate in">
-        <div className="cities-heading" data-reveal>
-          <p className="overline">On Tour</p>
-          <h2>Ten cities. Countless stories.</h2>
-        </div>
-        <div className="marquee">
-          <div className="marquee-track">
-            {marqueeCities.map((c, i) => (
-              <figure className="marquee-card" key={`${c.caption}-${i}`}>
-                <img src={c.src} alt={c.alt} />
-                <figcaption>{c.caption}</figcaption>
-              </figure>
+        {/* City slider indicator */}
+        <div className="hero-city-bar" aria-live="polite" aria-atomic="true">
+          <div className="hero-city-dots">
+            {CITY_SLIDES.map((_, i) => (
+              <span
+                key={i}
+                className={`hero-dot${i === slideIndex ? " active" : ""}`}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      <Divider />
+
 
       <section className="section" id="events">
         <div className="section-heading" data-reveal>
           <p className="overline">The 2026 Calendar</p>
           <h2>Find your moment in the spotlight.</h2>
           <p>
-            Filter the full Languages Live catalogue by city, audience, language, format and
-            sponsor-fit — every flagship IP, in one place.
+            Our flagship events include Times Future of Maternity, Times Study Abroad Conclave,
+            Times Career Counselling, NBT Mic Drop Madness, and Times India MSME Dialogue:
+            Atmanirbhar Udyam.
           </p>
         </div>
 
-        <div className="category-rail" role="tablist" aria-label="Quick category filter" data-reveal>
-          {categories.map((c) => (
-            <button
-              key={c}
-              type="button"
-              className={category === c ? "active" : ""}
-              onClick={() => setCategory(c)}
-              aria-pressed={category === c}
+        <div className="event-grid">
+          {events.map((event, i) => (
+            <div
+              key={event.id}
+              data-reveal
+              style={{ ['--reveal-delay' as never]: `${i * 80}ms` }}
             >
-              {c}
-            </button>
+              <EventCard event={event} />
+            </div>
           ))}
         </div>
+      </section>
 
-        <div className="discovery-panel" data-reveal>
-          <label className="search-box">
-            <span className="sr-only">Search the portfolio</span>
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search students, Delhi, Hindi, awards, healthcare, comedy…"
-              aria-label="Search Languages Live events"
-            />
-          </label>
-
-          <div className="filters" aria-label="Event filters">
-            <FilterSelect label="City" value={city} onChange={setCity} options={cityOptions} />
-            <FilterSelect label="Audience" value={audience} onChange={setAudience} options={audienceOptions} />
-            <FilterSelect label="Language" value={language} onChange={setLanguage} options={languageOptions} />
-            <FilterSelect label="Format" value={format} onChange={setFormat} options={formatOptions} />
-            <FilterSelect
-              label="Sort"
-              value={sort}
-              onChange={setSort}
-              options={["Featured", "Upcoming first", "City A-Z", "Category A-Z"] as const}
-            />
+      <section className="universes" id="universes">
+        <div className="universes-inner">
+          <div className="section-heading" data-reveal>
+            <p className="overline">Why Times Languages Live?</p>
+            <h2>Strong Speakers. Relevant Audiences. Outcome-Driven Events.</h2>
+            <p>
+              Built for India&apos;s diverse audiences, Times Languages Live curates region-first events
+              across healthcare, education, entertainment &amp; lifestyle, and MSMEs. Each experience is
+              designed for a regional audience, grounded in regional context, and focused on real
+              decisions - business, careers, and growth. From focused gatherings to large-format summits,
+              we bring together policymakers, industry leaders, and communities to exchange practical
+              insight and create direct, high-value connections both on-ground and online.
+            </p>
           </div>
-        </div>
-
-        <div className="results-bar">
-          <span>
-            Showing <strong>{filteredEvents.length}</strong> of {events.length} events
-          </span>
-          <button
-            className="reset-button"
-            type="button"
-            onClick={() => {
-              setQuery(""); setCategory("All"); setCity("All");
-              setAudience("All"); setLanguage("All"); setFormat("All");
-              setSort("Featured");
-            }}
-          >
-            Reset filters
-          </button>
-        </div>
-
-        {filteredEvents.length > 0 ? (
-          <div className="event-grid">
-            {filteredEvents.map((event, i) => (
-              <div
-                key={event.id}
+          <div className="universe-grid">
+            {UNIVERSES.map((u, i) => (
+              <article
+                className="universe-card"
+                key={u.title}
                 data-reveal
-                style={{ ['--reveal-delay' as never]: `${i * 80}ms` }}
+                style={{ ['--reveal-delay' as never]: `${i * 100}ms` }}
               >
-                <EventCard event={event} />
-              </div>
+                <span className="universe-numeral">{u.numeral}</span>
+                <h3>{u.title}</h3>
+                <p>{u.text}</p>
+              </article>
             ))}
           </div>
-        ) : (
-          <div className="empty-state" data-reveal>
-            <h3>No event matches that filter set.</h3>
-            <p>Try removing a filter or searching by a broader term — education, Delhi, parents, Hindi.</p>
-          </div>
-        )}
-      </section>
-
-      <Divider />
-
-      <section className="section universes" id="universes">
-        <div className="section-heading" data-reveal>
-          <p className="overline">Event Universes</p>
-          <h2>Where India shows up.</h2>
-          <p>
-            From career decisions to creator stages — four universes engineered around the moments
-            where vernacular India makes real choices.
-          </p>
-        </div>
-        <div className="universe-grid">
-          {UNIVERSES.map((u, i) => (
-            <article
-              className="universe-card"
-              key={u.title}
-              data-reveal
-              style={{ ['--reveal-delay' as never]: `${i * 100}ms` }}
-            >
-              <span className="universe-numeral">{u.numeral}</span>
-              <h3>{u.title}</h3>
-              <p>{u.text}</p>
-              <span className="universe-meta">{u.meta}</span>
-            </article>
-          ))}
         </div>
       </section>
-
-      <Divider />
 
       <section className="partners" id="partners">
         <div className="partners-copy" data-reveal>
           <p className="overline">For Partners</p>
-          <h2>One portfolio. Every high-intent audience.</h2>
+          <h2>Partner with Times Languages Live - Built Around Your Objectives.</h2>
           <p>
-            Languages Live gives brands a structured way to participate in the moments where Indian
-            audiences are deciding, building identity, seeking guidance and discovering opportunity
-            — at vernacular scale.
+            We bring regional business leaders, policymakers, and domain experts together with a
+            credible media voice to address real issues - from local healthcare access and education
+            gaps to MSME growth and evolving consumer trends. Work with us to position your brand
+            in regional markets, communicate with clarity to local audiences, and build relationships
+            that convert.
           </p>
           <div className="partners-actions">
-            <a className="button button-primary" href="mailto:sales@timeslanguages.in?subject=Languages Live annual partnership inquiry">
-              Get the Partnership Deck →
+            <a className="button button-primary" href="mailto:sales@timeslanguages.in?subject=Languages Live sponsorship inquiry">
+              Explore Sponsorship Opportunities →
             </a>
             <a className="button button-secondary" href="mailto:sales@timeslanguages.in?subject=Schedule a call">
               Schedule a Call
@@ -539,8 +354,6 @@ export function EventsLanding() {
         </div>
       </section>
 
-      <Divider />
-
       <section className="section" id="faq">
         <div className="section-heading" data-reveal>
           <p className="overline">FAQ</p>
@@ -563,8 +376,8 @@ export function EventsLanding() {
       <section className="newsletter" aria-label="Newsletter signup">
         <div className="newsletter-inner" data-reveal>
           <p className="overline">Stay in the loop</p>
-          <h2>The Languages Live Brief — to your inbox.</h2>
-          <p>New IP launches, city dates, partner openings and on-ground access — no spam, ever.</p>
+          <h2>The Languages Live Brief - to your inbox.</h2>
+          <p>Event launches, city dates, partner openings and on-ground access - no spam, ever.</p>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -597,7 +410,7 @@ export function EventsLanding() {
                 height={52}
               />
             </a>
-            <p>Premium, vernacular-first event IPs from Times Internet — built for the audiences, cities and languages that move India.</p>
+            <p>Region-first events across healthcare, education, entertainment &amp; lifestyle, and MSMEs - bringing policymakers, industry leaders, and communities together for real outcomes.</p>
             <div className="social-row" aria-label="Social media">
               <a href="https://www.linkedin.com/" aria-label="LinkedIn" rel="noopener noreferrer">in</a>
               <a href="https://www.instagram.com/" aria-label="Instagram" rel="noopener noreferrer">ig</a>
@@ -607,12 +420,12 @@ export function EventsLanding() {
           </div>
 
           <div className="footer-col">
-            <h4>Universes</h4>
+            <h4>Domains</h4>
             <ul>
               <li><a href="#events">Education</a></li>
               <li><a href="#events">Healthcare</a></li>
-              <li><a href="#events">Youth Culture</a></li>
-              <li><a href="#universes">All universes</a></li>
+              <li><a href="#events">Entertainment &amp; Lifestyle</a></li>
+              <li><a href="#events">MSME Growth</a></li>
             </ul>
           </div>
 
@@ -638,7 +451,7 @@ export function EventsLanding() {
         </div>
 
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Times Internet Ltd. — Languages Live. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Times Internet Ltd. - Languages Live. All rights reserved.</span>
           <span className="geo-tag">Headquartered in New Delhi · Serving Pan-India audiences</span>
         </div>
       </footer>
@@ -655,35 +468,7 @@ export function EventsLanding() {
   );
 }
 
-function statusWeight(status: LanguageEvent["status"]) {
-  if (status === "Live") return 0;
-  if (status === "Upcoming") return 1;
-  if (status === "Coming Soon") return 2;
-  return 3;
-}
 
-function FilterSelect<T extends string>({
-  label,
-  value,
-  onChange,
-  options
-}: {
-  label: string;
-  value: T;
-  onChange: (value: T) => void;
-  options: readonly T[];
-}) {
-  return (
-    <label>
-      <span>{label}</span>
-      <select value={value} onChange={(event) => onChange(event.target.value as T)}>
-        {options.map((option) => (
-          <option key={option} value={option}>{option}</option>
-        ))}
-      </select>
-    </label>
-  );
-}
 
 function EventCard({ event }: { event: LanguageEvent }) {
   const tags = [

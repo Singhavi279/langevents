@@ -6,11 +6,11 @@ const SITE_URL = "https://timeslanguages.in";
 const FAQS = [
   {
     q: "What is Times Languages Live?",
-    a: "Languages Live is the flagship vernacular-first events arm of Times Internet — a curated portfolio of premium IPs across Education, Healthcare and Youth Culture, built for the audiences, languages and cities that move modern India."
+    a: "Languages Live is the flagship vernacular-first events arm of Times Internet - a curated portfolio of premium IPs across Education, Healthcare and Youth Culture, built for the audiences, languages and cities that move modern India."
   },
   {
     q: "Which Indian cities do these events activate in?",
-    a: "Our calendar lights up Delhi, Mumbai, Pune, Jaipur, Bhopal, Patna, Lucknow, Chennai, Ahmedabad and Hyderabad — with multi-city formats for our flagship properties."
+    a: "Our calendar lights up Delhi, Mumbai, Pune, Jaipur, Bhopal, Patna, Lucknow, Chennai, Ahmedabad and Hyderabad - with multi-city formats for our flagship properties."
   },
   {
     q: "How can brands sponsor or partner with these events?",
@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     q: "Are events conducted in Hindi or English?",
-    a: "Most flagship IPs are bilingual or vernacular-first — Hindi, English, Hinglish and regional language expression, calibrated to each city and audience."
+    a: "Most flagship IPs are bilingual or vernacular-first - Hindi, English, Hinglish and regional language expression, calibrated to each city and audience."
   },
   {
     q: "How do I attend or register?",
@@ -42,7 +42,7 @@ export default function Home() {
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Times Internet — Languages Live",
+    name: "Times Internet - Languages Live",
     url: SITE_URL,
     logo: `${SITE_URL}/logo.png`,
     sameAs: [
@@ -121,7 +121,7 @@ export default function Home() {
     },
     organizer: {
       "@type": "Organization",
-      name: "Times Internet — Languages Live",
+      name: "Times Internet - Languages Live",
       url: SITE_URL
     }
   }));

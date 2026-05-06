@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s · Times Languages Live"
   },
   description:
-    "Discover Times Internet's Languages Live — a premium portfolio of education, healthcare, youth culture and partner-led event IPs across Indian cities, languages and high-intent communities.",
+    "Discover Times Internet's Languages Live - a premium portfolio of education, healthcare, youth culture and partner-led event IPs across Indian cities, languages and high-intent communities.",
   applicationName: "Times Languages Live Events",
   keywords: [
     "Times Languages Live",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Times Languages Live Events | India's Premium Vernacular Event Portfolio",
     description:
-      "A premium portfolio of education, healthcare, youth culture and partnership-led events from Times Internet — built for India's vernacular-first audiences.",
+      "A premium portfolio of education, healthcare, youth culture and partnership-led events from Times Internet - built for India's vernacular-first audiences.",
     url: SITE_URL,
     siteName: "Times Languages Live",
     locale: "en_IN",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
         url: "https://images.pexels.com/photos/8199169/pexels-photo-8199169.jpeg?auto=compress&cs=tinysrgb&w=1200",
         width: 1200,
         height: 630,
-        alt: "Times Languages Live — India's Premium Event Portfolio"
+        alt: "Times Languages Live - India's Premium Event Portfolio"
       }
     ]
   },
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Times Languages Live Events",
     description:
-      "Premium, vernacular-first event IPs across Education, Healthcare and Youth Culture — by Times Internet.",
+      "Premium, vernacular-first event IPs across Education, Healthcare and Youth Culture - by Times Internet.",
     site: "@timesinternet",
     creator: "@timesinternet",
     images: [
