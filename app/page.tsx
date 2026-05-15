@@ -3,10 +3,10 @@ import { events } from "@/lib/events";
 
 const SITE_URL = "https://timeslanguages.in";
 
-const FAQS = [
+const FAQs = [
   {
-    q: "What is Times Languages Live?",
-    a: "Languages Live is the flagship vernacular-first events arm of Times Internet - a curated portfolio of premium IPs across Education, Healthcare and Youth Culture, built for the audiences, languages and cities that move modern India."
+    q: "What is Times Internet Languages Live?",
+    a: "Times Internet Languages Live is the flagship vernacular-first events arm of Times Internet - a curated portfolio of premium IPs across Education, Healthcare and Lifestyle & Entertainment, built for the audiences, languages and cities that move modern India."
   },
   {
     q: "Which Indian cities do these events activate in?",
@@ -14,7 +14,7 @@ const FAQS = [
   },
   {
     q: "How can brands sponsor or partner with these events?",
-    a: "Inventory spans title sponsorship, category presenting, city partnerships, awards association, content series, expo booths, on-ground sampling and lead generation. Write to sales@timeslanguages.in for the partnership deck."
+    a: "Inventory spans title sponsorship, category presenting, city partnerships, awards association, content series, expo booths, on-ground sampling and lead generation. Write to gaurav.vats@timesinternet.in for the partnership deck."
   },
   {
     q: "Are events conducted in Hindi or English?",
@@ -30,7 +30,7 @@ export default function Home() {
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Times Languages Live Events",
+    name: "Times Internet Languages Live Events",
     itemListElement: events.map((event, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -42,7 +42,7 @@ export default function Home() {
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Times Internet - Languages Live",
+    name: "Times Internet Languages Live",
     url: SITE_URL,
     logo: `${SITE_URL}/logo.png`,
     sameAs: [
@@ -64,7 +64,7 @@ export default function Home() {
       {
         "@type": "ContactPoint",
         contactType: "sales",
-        email: "sales@timeslanguages.in",
+        email: "gaurav.vats@timesinternet.in",
         areaServed: "IN",
         availableLanguage: ["English", "Hindi"]
       }
@@ -74,7 +74,7 @@ export default function Home() {
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Times Languages Live",
+    name: "Times Internet Languages Live",
     url: SITE_URL,
     inLanguage: ["en-IN", "hi-IN"],
     potentialAction: {
@@ -129,7 +129,7 @@ export default function Home() {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({
+    mainEntity: FAQs.map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a }

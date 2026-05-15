@@ -1,33 +1,37 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cityOptions, events, type LanguageEvent } from "@/lib/events";
 
 const withUtm = (event: LanguageEvent) => {
-  const url = new URL(event.micrositeUrl);
-  url.searchParams.set("utm_source", "timeslanguages");
-  url.searchParams.set("utm_medium", "portfolio");
-  url.searchParams.set("utm_campaign", "languages_live_events");
-  url.searchParams.set("utm_content", event.id);
-  return url.toString();
+  try {
+    const url = new URL(event.micrositeUrl);
+    url.searchParams.set("utm_source", "timeslanguages");
+    url.searchParams.set("utm_medium", "portfolio");
+    url.searchParams.set("utm_campaign", "languages_live_events");
+    url.searchParams.set("utm_content", event.id);
+    return url.toString();
+  } catch {
+    return event.micrositeUrl;
+  }
 };
 
-const FAQS: { q: string; a: string }[] = [
+const FAQs: { q: string; a: string }[] = [
   {
-    q: "What is Times Languages Live?",
-    a: "Times Languages Live is the vernacular-first events arm of Times Internet - a curated portfolio of region-first experiences across healthcare, education, entertainment & lifestyle, and MSMEs, built for the audiences, cities, and languages that move modern India."
+    q: "What is Times Internet Languages Live?",
+    a: "Times Internet Languages Live is the vernacular-first events arm of Times Internet - a curated portfolio of region-first experiences across healthcare, education, entertainment & lifestyle, and MSMEs, built for the audiences, cities, and languages that move modern India."
   },
   {
-    q: "Which domains do Times Languages Live events cover?",
+    q: "Which domains do Times Internet Languages Live events cover?",
     a: "Our events span healthcare, education, entertainment & lifestyle, and MSMEs - each designed for a regional audience, grounded in regional context, and focused on real decisions like business growth, careers, and community health."
   },
   {
     q: "What are the flagship events?",
-    a: "Our flagship IPs include Times Future of Maternity, Times Study Abroad Conclave, Times Career Counselling, NBT Mic Drop Madness, and Times India MSME Dialogue: Atmanirbhar Udyam."
+    a: "Our flagship IPs include Times Future of Maternity, Times Study Abroad Conclave, Times Career Counselling, NBT Mic Drop Madness, and Times India MSME Dialogue."
   },
   {
-    q: "How can brands partner with Times Languages Live?",
-    a: "We offer tailored formats - from speaking slots and title sponsorships to integrated regional campaigns. Write to sales@timeslanguages.in for the partnership deck."
+    q: "How can brands partner with Times Internet Languages Live?",
+    a: "We offer tailored formats - from speaking slots and title sponsorships to integrated regional campaigns. Write to gaurav.vats@timesinternet.in for the partnership deck."
   },
   {
     q: "How do I attend or register?",
@@ -50,48 +54,33 @@ const CITY_SLIDES = [
   { word: "Namaskaram", lang: "Telugu", city: "Hyderabad", src: "/telugu_two.webm" },
 ];
 
-
-
 const UNIVERSES = [
-  { numeral: "01", title: "Education", text: "Study abroad, career counselling, college discovery and skilling - decisions that shape futures." },
-  { numeral: "02", title: "Healthcare", text: "Trusted platforms on maternity, fertility, wellness and family health access." },
-  { numeral: "03", title: "Entertainment & Lifestyle", text: "Creator discovery, Hindi-first culture, talent stages and city rounds." },
-  { numeral: "04", title: "MSME Growth", text: "Policy dialogue, business access, market connections and Atmanirbhar entrepreneurship." },
+  { numeral: "01", title: "Education", text: "Study abroad, career counselling, college discovery, and skilling – shaping futures through expert discussions." },
+  { numeral: "02", title: "Healthcare", text: "Conversations on maternity, fertility, wellness, and family health with vital insights for better lives." },
+  { numeral: "03", title: "Entertainment & Lifestyle", text: "Spotlighting creator discovery, Hindi-first culture, talent stages, and city rounds to ignite your passion." },
+  { numeral: "04", title: "MSME", text: "Forums for policy dialogue, business solutions, market access, and scalability for small businesses." },
 ];
 
 const PARTNER_INVENTORY = [
   { label: "Thought Leadership", note: "Position your brand as a domain authority." },
-  { label: "Decision-Maker Access", note: "Engage policymakers, industry leaders, experts." },
+  { label: "Decision-Maker Access", note: "Engage with policymakers, industry leaders, experts." },
   { label: "Regional Brand Relevance", note: "Speak to local audiences in their language." },
-  { label: "Multi-City Exposure", note: "Activate across 10+ Indian cities." },
+  { label: "Multi-City Exposure", note: "Active across 10+ Indian cities." },
   { label: "Audience Insights", note: "First-party data from high-intent communities." },
-  { label: "Speaking Slots", note: "Own the stage. Drive the conversation." },
-  { label: "Title Sponsorship", note: "Lead the IP. Own the marquee." },
-  { label: "Integrated Campaigns", note: "Regional campaigns aligned with your goals." }
+  { label: "Speaking Slots", note: "Own the stage. Drive the conversation." }
 ];
 
-// Ornamental section divider
-const Divider = () => (
-  <div className="ornament" aria-hidden="true">
-    <span className="ornament-rule" />
-    <svg viewBox="0 0 64 16" width="64" height="16">
-      <path
-        d="M0 8 H22 M42 8 H64 M32 2 L36 8 L32 14 L28 8 Z M24 8 L28 8 M36 8 L40 8"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1"
-      />
-      <circle cx="32" cy="8" r="1.5" fill="currentColor" />
-    </svg>
-    <span className="ornament-rule" />
-  </div>
-);
+
 
 export function EventsLanding() {
 
   const [scrolled, setScrolled] = useState(false);
   const [showTop, setShowTop] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [showInterestModal, setShowInterestModal] = useState(false);
+
+  const openModal = useCallback(() => setShowInterestModal(true), []);
+  const closeModal = useCallback(() => setShowInterestModal(false), []);
 
   const [slideIndex, setSlideIndex] = useState(0);
   const [activeSlot, setActiveSlot] = useState<0 | 1>(0);
@@ -159,11 +148,6 @@ export function EventsLanding() {
     return () => io.disconnect();
   }, []);
 
-
-
-
-
-
   return (
     <main>
       <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} aria-hidden="true" />
@@ -178,17 +162,12 @@ export function EventsLanding() {
           />
         </a>
         <nav className="nav-links" aria-label="Primary navigation">
-          <a href="#events">Calendar</a>
-          <a href="#universes">Universes</a>
-          <a href="#partners">For Partners</a>
-          <a href="#faq">FAQ</a>
+          <a href="#top">Home</a>
+          <a href="#events">Events</a>
+          <a href="#partners">Partner</a>
+          <a href="#faq">FAQs</a>
+          <a href="#contact">Contact Us</a>
         </nav>
-        <a
-          className="header-cta"
-          href="mailto:sales@timeslanguages.in?subject=Languages Live partnership inquiry"
-        >
-          Contact Sales
-        </a>
       </header>
 
       <section className="hero" id="top">
@@ -225,7 +204,7 @@ export function EventsLanding() {
             />
           </a>
           <div className="hero-copy">
-            <span className="hero-greeting" key={`greeting-${slideIndex}`}>
+            <span className="hero-greeting" key={`greeting-${CITY_SLIDES[slideIndex].lang}`}>
               {CITY_SLIDES[slideIndex].word},
               <em>{CITY_SLIDES[slideIndex].lang}</em>
             </span>
@@ -233,14 +212,14 @@ export function EventsLanding() {
               India&apos;s grandest stage, <span className="hero-script">in every language</span>
             </h1>
             <p>
-              A premium portfolio of vernacular-first event IPs from <strong>Times Internet</strong>, built across <strong>healthcare, education, entertainment & lifestyle, and MSME domains</strong> for the audiences, cities, and languages that move modern India
+              A premium portfolio of vernacular-first event IPs from <strong>Times Internet</strong>, built across <strong>healthcare, education, entertainment & lifestyle, and MSME domains</strong> for the audiences, cities, and languages that move modern India.
             </p>
             <div className="hero-actions">
-              <a href="#events" className="button button-primary">
+              <button type="button" className="button button-primary" onClick={openModal}>
+                Express Interest
+              </button>
+              <a href="#events" className="button button-secondary button-ghost">
                 Explore Our Events →
-              </a>
-              <a href="#partners" className="button button-secondary button-ghost">
-                Partner with Us
               </a>
             </div>
           </div>
@@ -259,14 +238,12 @@ export function EventsLanding() {
         </div>
       </section>
 
-
-
       <section className="about-us section" id="about">
         <div className="section-heading" data-reveal>
           <p className="overline">About Us</p>
           <div className="about-text-content">
             <p>
-              Built for India’s diverse audiences, Times Languages Live curates region-first events across healthcare, education, entertainment, lifestyle, and MSMEs. Each experience is designed for a regional audience, grounded in regional context, and focused on real decisions, business, careers, and growth.
+              Built for India’s diverse audiences, Times Internet Languages Live curates region-first events across healthcare, education, entertainment, lifestyle, and MSMEs. Each experience is designed for a regional audience, grounded in regional context, and focused on real decisions, business, careers, and growth.
             </p>
             <p>
               From focused gatherings to large-format summits, we bring together policymakers, industry leaders, and communities to exchange practical insight and create direct, high-value connections both on-ground and online.
@@ -275,16 +252,13 @@ export function EventsLanding() {
         </div>
       </section>
 
-
-
       <section className="section" id="events">
         <div className="section-heading" data-reveal>
           <p className="overline">Flagship Events</p>
           <h2>Find your moment in the spotlight.</h2>
           <p>
             Our flagship events include Times Future of Maternity, Times Study Abroad Conclave,
-            Times Career Counselling, NBT Mic Drop Madness, and Times India MSME Dialogue:
-            Atmanirbhar Udyam.
+            Times Career Counselling, NBT Mic Drop Madness, and Times India MSME Dialogue
           </p>
         </div>
 
@@ -304,8 +278,8 @@ export function EventsLanding() {
       <section className="universes" id="universes">
         <div className="universes-inner">
           <div className="section-heading" data-reveal>
-            <p className="overline">Why Times Languages Live?</p>
-            <h2>Strong Speakers. Relevant Audiences. Outcome-Driven Events.</h2>
+            <p className="overline">Why Times Internet Languages Live?</p>
+            <h2>Strong Speakers. Relevant Audiences. <br /> Outcome-Driven Events.</h2>
             <p>
               We bring regional business leaders, policymakers, and domain experts together with a credible media voice to address real issues – from local healthcare access and education gaps to MSME growth and evolving consumer trends.
             </p>
@@ -330,21 +304,14 @@ export function EventsLanding() {
       <section className="partners" id="partners">
         <div className="partners-copy" data-reveal>
           <p className="overline">For Partners</p>
-          <h2>Partner with Times Languages Live - Built Around Your Objectives.</h2>
+          <h2>Partner with Times Internet Languages Live - Built Around Your Objectives.</h2>
           <div className="partners-intro-row">
             <p>
               Work with us to position your brand in regional markets, communicate with clarity to local audiences, and build relationships that convert.
             </p>
-            <a className="button button-primary" href="mailto:sales@timeslanguages.in?subject=Languages Live sponsorship inquiry">
+            <button type="button" className="button button-primary" onClick={openModal}>
               Partner with Us →
-            </a>
-          </div>
-          <div className="partners-actions">
-            <div className="partners-sponsorship-note">
-              <p>
-                <strong>Sponsorship Opportunities:</strong> Connect with our team to explore tailored formats – from speaking slots to integrated regional campaigns aligned with your goals.
-              </p>
-            </div>
+            </button>
           </div>
         </div>
         <div className="partner-inventory">
@@ -363,15 +330,16 @@ export function EventsLanding() {
             </div>
           ))}
         </div>
+
       </section>
 
       <section className="section" id="faq">
         <div className="section-heading" data-reveal>
-          <p className="overline">FAQ</p>
+          <p className="overline" style={{ textTransform: "none" }}>FAQs</p>
           <h2>Everything you wanted to ask.</h2>
         </div>
         <div className="faq-list">
-          {FAQS.map((f, i) => (
+          {FAQs.map((f, i) => (
             <details
               key={f.q}
               data-reveal
@@ -394,7 +362,7 @@ export function EventsLanding() {
               e.preventDefault();
               const data = new FormData(e.currentTarget);
               const email = (data.get("email") as string) || "";
-              window.location.href = `mailto:hello@timeslanguages.in?subject=Subscribe to Languages Live brief&body=Please subscribe ${encodeURIComponent(email)}`;
+              window.location.href = `mailto:gaurav.vats@timesinternet.in?subject=Subscribe to Languages Live brief&body=Please subscribe ${encodeURIComponent(email)}`;
             }}
           >
             <input
@@ -406,6 +374,35 @@ export function EventsLanding() {
             />
             <button type="submit" className="button button-primary">Subscribe</button>
           </form>
+        </div>
+      </section>
+
+      <section className="contact-us section" id="contact">
+        <div className="section-heading" data-reveal>
+          <p className="overline">Contact Us</p>
+          <h2>Get in Touch</h2>
+          <p>Reach out to our team for any inquiries or support.</p>
+        </div>
+        <div className="contact-grid">
+          {[
+            { icon: "🤝", role: "General Query", name: "Avnish Singh", number: "+91 7669138964", email: "avnish.singh@timesinternet.in" },
+            { icon: "🏆", role: "Award Nominations", name: "Sagun Kumari", number: "+91 9304412377", email: "sagun.kumari@timesinternet.in" },
+            { icon: "🎤", role: "Speaking Opportunity", name: "Simran Singh", number: "+91 7838788554", email: "simran1@timesinternet.in" },
+            { icon: "✉️", role: "Sponsorships", name: "Gaurav Vats", number: "+91 9811573962", email: "gaurav.vats@timesinternet.in" },
+          ].map((contact, i) => (
+            <div
+              className="contact-card"
+              key={contact.email}
+              data-reveal
+              style={{ ['--reveal-delay' as never]: `${i * 100}ms` }}
+            >
+              <div className="contact-card-icon">{contact.icon}</div>
+              <p className="contact-card-role">{contact.role}</p>
+              <h3>{contact.name}</h3>
+              <p><span>Contact:</span> <a href={`tel:${contact.number.replace(/\s/g, '')}`}>{contact.number}</a></p>
+              <p><span>Email:</span> <a href={`mailto:${contact.email}`}>{contact.email}</a></p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -423,10 +420,18 @@ export function EventsLanding() {
             </a>
             <p>Region-first events across healthcare, education, entertainment &amp; lifestyle, and MSMEs - bringing policymakers, industry leaders, and communities together for real outcomes.</p>
             <div className="social-row" aria-label="Social media">
-              <a href="https://www.linkedin.com/" aria-label="LinkedIn" rel="noopener noreferrer">in</a>
-              <a href="https://www.instagram.com/" aria-label="Instagram" rel="noopener noreferrer">ig</a>
-              <a href="https://twitter.com/" aria-label="X / Twitter" rel="noopener noreferrer">𝕏</a>
-              <a href="https://www.youtube.com/" aria-label="YouTube" rel="noopener noreferrer">▶</a>
+              <a href="https://www.linkedin.com/company/times-languages-live/" aria-label="LinkedIn" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=61589492833800" aria-label="Facebook" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" /></svg>
+              </a>
+              <a href="https://x.com/timeslanglive" aria-label="X / Twitter" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" /></svg>
+              </a>
+              <a href="https://www.youtube.com/@timeslanguageslive" aria-label="YouTube" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" /></svg>
+              </a>
             </div>
           </div>
 
@@ -453,17 +458,16 @@ export function EventsLanding() {
             <h4>Company</h4>
             <ul>
               <li><a href="#partners">For Partners</a></li>
-              <li><a href="#faq">FAQ</a></li>
-              <li><a href="mailto:sales@timeslanguages.in">Contact Sales</a></li>
-              <li><a href="mailto:press@timeslanguages.in">Press</a></li>
+              <li><a href="#faq">FAQs</a></li>
+              <li><a href="mailto:gaurav.vats@timesinternet.in">Contact Sales</a></li>
               <li><a href="https://www.timesinternet.in/" rel="noopener noreferrer">Times Internet</a></li>
             </ul>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Times Internet Ltd. - Languages Live. All rights reserved.</span>
-          <span className="geo-tag">Headquartered in New Delhi · Serving Pan-India audiences</span>
+          <span>© {new Date().getFullYear()} Times Internet Languages Live. All rights reserved.</span>
+          <span className="geo-tag">Headquartered in Uttar Pradesh · Serving Pan-India regional audiences</span>
         </div>
       </footer>
 
@@ -475,21 +479,13 @@ export function EventsLanding() {
       >
         ↑
       </button>
+
+      {showInterestModal && <InterestModal onClose={closeModal} />}
     </main>
   );
 }
 
-
-
 function EventCard({ event }: { event: LanguageEvent }) {
-  const tags = [
-    event.category,
-    event.cityLabel,
-    ...event.languageTags,
-    ...event.intentTags,
-    ...event.formatTags
-  ].slice(0, 6);
-
   return (
     <article className={`event-card ${event.visualTone}`}>
       <div className="event-image">
@@ -497,7 +493,7 @@ function EventCard({ event }: { event: LanguageEvent }) {
         <span data-status={event.status}>{event.status}</span>
       </div>
       <div className="event-body">
-        <p className="event-eyebrow">{event.eyebrow}</p>
+        <p className="event-eyebrow">{event.category}</p>
         <h3>{event.title}</h3>
         <p>{event.subtitle}</p>
         <div className="meta-row">
@@ -505,7 +501,7 @@ function EventCard({ event }: { event: LanguageEvent }) {
           <span className="meta-item"><span className="meta-icon">◉</span>{event.cityLabel}</span>
         </div>
         <div className="tag-row">
-          {tags.map((tag) => (
+          {event.cardTags.slice(0, 5).map((tag) => (
             <span key={tag}>{tag}</span>
           ))}
         </div>
@@ -516,5 +512,185 @@ function EventCard({ event }: { event: LanguageEvent }) {
         </div>
       </div>
     </article>
+  );
+}
+
+/* ─── Interest Modal with OTP ─── */
+function InterestModal({ onClose }: { onClose: () => void }) {
+  const [form, setForm] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    designation: "",
+    company: "",
+    note: "",
+    optComms: false,
+    optTerms: true,
+  });
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpError, setOtpError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const backdropRef = useRef<HTMLDivElement>(null);
+
+  const OTP_CODE = "1234";
+
+  const update = (field: string, value: string | boolean) =>
+    setForm((prev) => ({ ...prev, [field]: value }));
+
+  const handleSendOtp = () => {
+    if (form.phone.replace(/\D/g, "").length < 10) return;
+    setOtpSent(true);
+    setOtpError("");
+  };
+
+  const handleVerifyOtp = () => {
+    if (otpValue === OTP_CODE) {
+      setOtpVerified(true);
+      setOtpError("");
+    } else {
+      setOtpError("Invalid OTP. Try 1234.");
+    }
+  };
+
+  const canSubmit =
+    form.fullName.trim() &&
+    form.phone.trim() &&
+    form.email.trim() &&
+    form.designation.trim() &&
+    form.company.trim() &&
+    otpVerified &&
+    form.optTerms;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+    setSending(true);
+    setTimeout(() => {
+      setSending(false);
+      setSubmitted(true);
+    }, 800);
+  };
+
+  const handleBackdrop = (e: React.MouseEvent) => {
+    if (e.target === backdropRef.current) onClose();
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  if (submitted) {
+    return (
+      <div className="modal-backdrop" ref={backdropRef} onClick={handleBackdrop}>
+        <div className="modal-panel">
+          <button type="button" className="modal-close" onClick={onClose} aria-label="Close">×</button>
+          <div className="modal-success">
+            <span className="modal-success-icon">✓</span>
+            <h3>Thank you, {form.fullName.split(" ")[0]}!</h3>
+            <p>We&apos;ve received your interest. Our partnerships team will reach out within 24 hours.</p>
+            <button type="button" className="button button-primary" onClick={onClose}>Close</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="modal-backdrop" ref={backdropRef} onClick={handleBackdrop}>
+      <div className="modal-panel">
+        <button type="button" className="modal-close" onClick={onClose} aria-label="Close">×</button>
+        <div className="modal-header">
+          <p className="overline" style={{ textTransform: "none", marginBottom: 8 }}>Express Interest</p>
+          <h3>Partner with Times Internet Languages Live</h3>
+          <p>Fill in your details and our team will get back to you.</p>
+        </div>
+        <form className="modal-form" onSubmit={handleSubmit}>
+          <div className="modal-field">
+            <label htmlFor="interest-name">Full Name *</label>
+            <input id="interest-name" type="text" required value={form.fullName} onChange={(e) => update("fullName", e.target.value)} placeholder="Your full name" />
+          </div>
+
+          <div className="modal-field">
+            <label htmlFor="interest-phone">Phone Number *</label>
+            <div className="modal-otp-row">
+              <input
+                id="interest-phone"
+                type="tel"
+                required
+                value={form.phone}
+                onChange={(e) => { update("phone", e.target.value); if (otpVerified) { setOtpVerified(false); setOtpSent(false); setOtpValue(""); } }}
+                placeholder="+91 9876543210"
+                disabled={otpVerified}
+              />
+              {!otpVerified && (
+                <button type="button" className="modal-otp-btn" onClick={handleSendOtp} disabled={otpSent && !otpError}>
+                  {otpSent ? "Resend" : "Send OTP"}
+                </button>
+              )}
+              {otpVerified && <span className="modal-otp-verified">✓ Verified</span>}
+            </div>
+            {otpSent && !otpVerified && (
+              <div className="modal-otp-row" style={{ marginTop: 8 }}>
+                <input
+                  type="text"
+                  maxLength={4}
+                  value={otpValue}
+                  onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Enter 4-digit OTP"
+                  className="modal-otp-input"
+                />
+                <button type="button" className="modal-otp-btn" onClick={handleVerifyOtp}>Verify</button>
+              </div>
+            )}
+            {otpError && <span className="modal-field-error">{otpError}</span>}
+          </div>
+
+          <div className="modal-field">
+            <label htmlFor="interest-email">Email *</label>
+            <input id="interest-email" type="email" required value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="you@company.com" />
+          </div>
+
+          <div className="modal-row-2">
+            <div className="modal-field">
+              <label htmlFor="interest-designation">Designation *</label>
+              <input id="interest-designation" type="text" required value={form.designation} onChange={(e) => update("designation", e.target.value)} placeholder="VP Marketing" />
+            </div>
+            <div className="modal-field">
+              <label htmlFor="interest-company">Company *</label>
+              <input id="interest-company" type="text" required value={form.company} onChange={(e) => update("company", e.target.value)} placeholder="Acme Corp" />
+            </div>
+          </div>
+
+          <div className="modal-field">
+            <label htmlFor="interest-note">Add a Note <span>(optional)</span></label>
+            <textarea id="interest-note" rows={3} value={form.note} onChange={(e) => update("note", e.target.value)} placeholder="Tell us about your interest or questions..." />
+          </div>
+
+          <div className="modal-checks">
+            <label className="modal-check">
+              <input type="checkbox" checked={form.optComms} onChange={(e) => update("optComms", e.target.checked)} />
+              <span>I agree to receive further communication via WhatsApp and email</span>
+            </label>
+            <label className="modal-check">
+              <input type="checkbox" checked={form.optTerms} onChange={(e) => update("optTerms", e.target.checked)} />
+              <span>I agree to the <a href="#" onClick={(e) => e.preventDefault()}>Terms &amp; Conditions</a> and <a href="#" onClick={(e) => e.preventDefault()}>Privacy Policy</a></span>
+            </label>
+          </div>
+
+          <button type="submit" className="button button-primary modal-submit" disabled={!canSubmit || sending}>
+            {sending ? "Submitting..." : "Submit Interest"}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
